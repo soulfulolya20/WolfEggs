@@ -3,12 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - zero
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - sprite
   - Water
   - UI
   - 
@@ -40,4 +41,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: sprite
+    uniqueID: 3043187353
     locked: 0
