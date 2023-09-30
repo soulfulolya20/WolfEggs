@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "707121427148",
+    "firebase_url": "https://wolfeggs-dc60d-default-rtdb.firebaseio.com",
+    "project_id": "wolfeggs-dc60d",
+    "storage_bucket": "wolfeggs-dc60d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707121427148:android:c07484c8f3ee650a914869",
+        "android_client_info": {
+          "package_name": "com.soulful_olya.WolfEggs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5Ccb9vGttZDEcu62-D7ouZkc9eco7h84"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
