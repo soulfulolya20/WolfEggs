@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 
 // Здесь вся логика игры
-public class GameController : MonoBehaviour{
+public class GameController : MonoBehaviour {
 
     private DatabaseReference _database;
     

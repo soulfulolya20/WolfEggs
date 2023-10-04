@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
 using Firebase.Database;
+using Firebase.Extensions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -250,7 +251,17 @@ public class Game : MonoBehaviour
                 Destroy(eg);
 
         var namee = DataTransfer.playerName;
-        _database.Child(namee).SetValueAsync(score);
-        SceneManager.LoadSceneAsync("TableScene");
+        _database.Child(namee).SetValueAsync(score).ContinueWith(task =>
+        {
+            while (true)
+            {
+                if (task.IsCompleted)
+                {
+                    task.ContinueWithOnMainThread(_ => { SceneManager.LoadSceneAsync("TableScene"); });
+                    break;
+                }
+            }
+        });
+        
     }
 }

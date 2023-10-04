@@ -12,6 +12,7 @@ public class MenuController : MonoBehaviour{
     public GameObject table;
 
     public TMP_InputField playerName;
+    public TMP_Text status;
     public GameObject tableContent;
     public GameObject tableContentElement;
 
@@ -34,29 +35,47 @@ public class MenuController : MonoBehaviour{
     {
         _databaseReference.OrderByValue().GetValueAsync().ContinueWith(task =>
         {
-            if (task.IsCompleted)
+            while (true)
             {
-                // Получаем человечков и складываем их в листик
-                var dataSnapshot = task.Result;
-                List<TableItem> items = new List<TableItem>();
-                foreach (var child in dataSnapshot.Children)
-                    items.Add(new TableItem(child.Key, int.Parse(child.Value.ToString())));
-                
-                // Сортируем человечков
-                items = items.OrderByDescending(obj => obj.score).ToList();
-                
-                // Выводим человечков
-                int i = 0;
-                foreach (var item in items)
-                    task.ContinueWithOnMainThread(_ =>
-                    {
-                        tableContentElement.GetComponent<TMP_Text>().text = $"{i + 1}. {item}";
-                        Instantiate(tableContentElement, tableContent.transform);
-                        i++;
-                    });
+                if (task.IsCompleted)
+                {
+                    // Получаем человечков и складываем их в листик
+                    var dataSnapshot = task.Result;
+                    List<TableItem> items = new List<TableItem>();
+                    foreach (var child in dataSnapshot.Children)
+                        items.Add(new TableItem(child.Key, int.Parse(child.Value.ToString())));
 
+                    //LogList(items);
+                    // Сортируем человечков
+                    items = items.OrderByDescending(obj => obj.score).ToList();
+                    LogList(items);
+
+                    // Выводим человечков
+                    
+                    task.ContinueWithOnMainThread(_ =>
+                    {   
+                        int i = 0;
+                        foreach (var item in items)
+                        {
+                            tableContentElement.GetComponent<TMP_Text>().text = $"{i + 1}. {item}";
+                            Instantiate(tableContentElement, tableContent.transform);
+                            i++;
+                        }
+                    });
+                        
+                    break;
+                }
             }
         });
+    }
+    
+    void LogList<T>(List<T> list)
+    {
+
+        foreach (var item in list)
+        {
+            Debug.Log(item);
+        }
     }
     
     // Переключала инпутов
@@ -77,6 +96,12 @@ public class MenuController : MonoBehaviour{
     // Конпка старт
     public void OnStartClick()
     {
+        status.text = "";
+        if (playerName.text == "")
+        {
+            status.text = "Нужно ввести имя игрока!";
+            return;
+        }
         // Сохраняем имя игрока
         DataTransfer.playerName = playerName.text;
         
