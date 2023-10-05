@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EggsContoller : MonoBehaviour
@@ -47,7 +45,7 @@ public class EggsContoller : MonoBehaviour
         }
 
         step++;
-        yield return new WaitForSeconds(game.time);
+        yield return new WaitForSeconds(game.initialTime);
         StartCoroutine(Steps());
     }
 }

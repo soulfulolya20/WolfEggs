@@ -12,7 +12,9 @@ public class Game : MonoBehaviour
 {
     public GameObject zero;
 
-    public float time = 1.5f;
+    public float initialTime = 1.5f; // Начальное значение времени между яйцами
+    private float minTime = 0.5f;
+    private float timeBetweenEggs;
 
     public int hp;
     public int score;
@@ -22,6 +24,10 @@ public class Game : MonoBehaviour
     public GameObject hp1;
     public GameObject hp2;
     public GameObject hp3;
+
+    public GameObject hp1Full;
+    public GameObject hp2Full;
+    public GameObject hp3Full;
 
     public GameObject player1;
     public GameObject player2;
@@ -87,6 +93,14 @@ public class Game : MonoBehaviour
         player3.SetActive(false);
         player4.SetActive(false);
 
+        hp1Full.SetActive(false);
+        hp2Full.SetActive(false);
+        hp3Full.SetActive(false);
+
+        initialTime = 1.5f;
+
+        timeBetweenEggs = initialTime;
+
         foreach (GameObject eg in egg1)
         {
             eg.SetActive(false);
@@ -149,8 +163,16 @@ public class Game : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (isPlaying) StopGame();
-            else StartGame();
+            if (isPlaying)
+            {
+                // Если игра уже запущена, то не вызываем StopGame(), а просто возвращаемся
+                return;
+            }
+
+            StartGame();
+            hp1Full.SetActive(true);
+            hp2Full.SetActive(true);
+            hp3Full.SetActive(true);
         }
     }
 
@@ -166,8 +188,17 @@ public class Game : MonoBehaviour
         if (comp.spawn == 3) comp.egg = egg3;
         if (comp.spawn == 4) comp.egg = egg4;
 
+        yield return new WaitForSeconds(timeBetweenEggs);
 
-        yield return new WaitForSeconds(time);
+        // Проверяем, прошло ли 10 секунд и увеличиваем скорость яиц, если да
+        if (score > 0 && score % 10 == 0)
+        {
+            if (timeBetweenEggs > minTime)
+            {
+                timeBetweenEggs -= 0.1f; // Уменьшите это значение, чтобы увеличить скорость
+            }
+        }
+
         StartCoroutine(Timer());
     }
 
@@ -178,18 +209,36 @@ public class Game : MonoBehaviour
 
     public void Count()
     {
-        score++;
-        counter.text = score.ToString();
-        soundCount.Play();
+        if (hp < 4) // Проверяем, что количество жизней меньше 4
+        {
+            score++;
+            counter.text = score.ToString();
+            soundCount.Play();
+        }
     }
 
     public void Crash()
     {
         hp++;
         soundCrash.Play();
-        if (hp >= 1) hp1.SetActive(true);
-        if (hp >= 2) hp2.SetActive(true);
-        if (hp >= 3) hp3.SetActive(true);
+
+        // Отображаем разбитые жизни в зависимости от их количества
+        if (hp == 1)
+        {
+            hp1.SetActive(true);
+            hp1Full.SetActive(false);
+        }
+        else if (hp == 2)
+        {
+            hp2.SetActive(true);
+            hp2Full.SetActive(false);
+        }
+        else if (hp == 3)
+        {
+            hp3.SetActive(true);
+            hp3Full.SetActive(false);
+        }
+
         if (hp > 3) StopGame();
     }
 
@@ -205,7 +254,10 @@ public class Game : MonoBehaviour
         playerPose = 1;
         score = 0;
 
-
+        // Скрываем целые и разбитые жизни при начале игры
+        // hp1Full.SetActive(false);
+        // hp2Full.SetActive(false);
+        // hp3Full.SetActive(false);
         hp1.SetActive(false);
         hp2.SetActive(false);
         hp3.SetActive(false);
@@ -218,6 +270,15 @@ public class Game : MonoBehaviour
     {
         isPlaying = false;
         StopAllCoroutines();
+
+        // Скрываем все жизни при завершении игры
+        hp1.SetActive(false);
+        hp2.SetActive(false);
+        hp3.SetActive(false);
+        hp1Full.SetActive(false);
+        hp2Full.SetActive(false);
+        hp3Full.SetActive(false);
+
         foreach (GameObject eg in egg1)
         {
             eg.SetActive(false);
@@ -262,6 +323,5 @@ public class Game : MonoBehaviour
                 }
             }
         });
-        
     }
 }
