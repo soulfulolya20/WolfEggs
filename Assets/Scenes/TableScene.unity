@@ -645,8 +645,8 @@ MonoBehaviour:
   input: {fileID: 1179240761}
   table: {fileID: 5523343152024590955}
   playerName: {fileID: 1515350848}
-  status: {fileID: 0}
-  tableContent: {fileID: 646734181}
+  status: {fileID: 646734182}
+  tableContent: {fileID: 5523343153056900838}
   tableContentElement: {fileID: 2869987791462581005, guid: 13bf89f0e391b3c47aedca50eb9a41c3, type: 3}
 --- !u!1 &1080226981
 GameObject:
